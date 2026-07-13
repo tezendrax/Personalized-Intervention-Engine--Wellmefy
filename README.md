@@ -43,7 +43,7 @@ flowchart TD
     ExcludeSleep --> Scorer
     
     Scorer --> SelectTop[6. Sort & Select Top 5 Missions]
-    SelectTop --> CheckLLM{7. Is GITHUB_TOKEN Configured?}
+    SelectTop --> CheckLLM{7. Is AI Coach Connected?}
     
     CheckLLM -->|Yes| LLMCall[8. Query LLM Wellness Model]
     LLMCall --> CustomizeMissions[9. Rewrite Titles & Descriptions with custom academic details]
