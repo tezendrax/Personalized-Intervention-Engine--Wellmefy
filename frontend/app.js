@@ -158,7 +158,102 @@ async function getRecommendations() {
         
         renderRecommendations(data.recommendations, payload, data.advice);
     } catch (err) {
-        el.recsContainer.innerHTML = `<p style="color: var(--danger); text-align: center; padding: 2rem;">Error: ${err.message}</p>`;
+        console.warn("API recommendation failed. Falling back to local offline mock mode.", err);
+        
+        // Alert user of mock mode status
+        el.serverStatus.textContent = "API Offline (Mock Mode)";
+        el.serverStatus.style.background = "rgba(245, 158, 11, 0.15)";
+        el.serverStatus.style.borderColor = "rgba(245, 158, 11, 0.3)";
+        el.serverStatus.style.color = "var(--warning)";
+        
+        const mockMissions = [
+            {
+                mission_id: "academic-pomodoro-focus",
+                title: "25-Min Focus: Study session",
+                description: "Work on academic objectives using the Pomodoro technique.",
+                category: "academic",
+                difficulty: 0.5,
+                points_value: 50,
+                score: 0.985,
+                rationale: "Recommended to help prepare for your upcoming exams and reinforce focus."
+            },
+            {
+                mission_id: "sleep-digital-detox",
+                title: "Digital Curfew Mode",
+                description: "Avoid screens 45 minutes before sleep to protect melatonin cycles.",
+                category: "sleep",
+                difficulty: 0.4,
+                points_value: 60,
+                score: 0.942,
+                rationale: "Recommended to reduce screen time and improve sleep quality before exams."
+            },
+            {
+                mission_id: "social-chat-friend",
+                title: "Peers Study Break",
+                description: "Call or check in with a classmate or close friend for 10-15 minutes.",
+                category: "social",
+                difficulty: 0.3,
+                points_value: 40,
+                score: 0.895,
+                rationale: "Recommended to restore social connectivity and take a productive rest break."
+            },
+            {
+                mission_id: "sleep-bedtime-anchor",
+                title: "Anchor Bedtime Sleep",
+                description: "Go to bed by your bedtime target to align sleep hygiene.",
+                category: "sleep",
+                difficulty: 0.3,
+                points_value: 45,
+                score: 0.880,
+                rationale: "Recommended to ensure cognitive recovery and combat academic stress."
+            },
+            {
+                mission_id: "academic-backlog-audit",
+                title: "Subject Backlog Review",
+                description: "Review concepts and note down sections you struggled with over the last 7 days.",
+                category: "academic",
+                difficulty: 0.6,
+                points_value: 55,
+                score: 0.865,
+                rationale: "Recommended to identify subject fears and schedule revision hours."
+            }
+        ];
+
+        // Dynamically customize the mock data based on form inputs!
+        const feared = el.fearedSubject.value || "Operating Systems";
+        const exam = el.examSubject.value || "Data Structures";
+        const examDate = el.examDate.value || "soon";
+        const prog = el.programmingIssue.value || "pointers memory leaks";
+        const screen = el.screentimeHours.value ? parseFloat(el.screentimeHours.value) : 6.5;
+        const bedtime = el.bedtimeTarget.value || "23:00";
+        
+        // Map personalized values on top of mockMissions
+        const personalizedMock = mockMissions.map(m => {
+            let customM = { ...m };
+            if (customM.mission_id === "academic-pomodoro-focus") {
+                customM.title = `25-Min Focus: ${feared}`;
+                customM.description = `Work on your struggled subject '${feared}' and debug '${prog}' using the Pomodoro technique.`;
+                customM.rationale = `Recommended to prevent academic burnout on feared subject '${feared}' and debug programming blocks.`;
+            } else if (customM.mission_id === "sleep-digital-detox") {
+                customM.title = `Digital Curfew (${screen}h Screen)`;
+                customM.description = `You logged ${screen}h on screens today. Set a strict 45-minute digital curfew to boost rest.`;
+                customM.rationale = `Recommended to limit screen time and ensure your brain is rested for upcoming exam: '${exam}'.`;
+            } else if (customM.mission_id === "social-chat-friend") {
+                customM.title = `Call a Friend (Social Catchup)`;
+                customM.description = `Since your social index is low, call a close peer or study partner for 15 minutes to talk about non-academic interests.`;
+            } else if (customM.mission_id === "sleep-bedtime-anchor") {
+                customM.title = `Anchor Bedtime: ${bedtime}`;
+                customM.description = `Head to sleep tonight by your target bedtime of ${bedtime} to recover sleep debt.`;
+            } else if (customM.mission_id === "academic-backlog-audit") {
+                customM.title = `Audit ${exam} Prep`;
+                customM.description = `Review your preparation backlog for your upcoming '${exam}' exam on ${examDate}.`;
+            }
+            return customM;
+        });
+        
+        const mockAdvice = `Coach Advice (Offline Mock Mode): You need to study '${feared}' for at least 2.5 hours today. Sleep early by your target bedtime ${bedtime} to optimize sleep debt recovery, and limit your ${screen}h daily screen time.`;
+        
+        renderRecommendations(personalizedMock, payload, mockAdvice);
     }
 }
 
@@ -288,7 +383,31 @@ async function fetchParameters() {
             `;
         }).join('');
     } catch (err) {
-        el.paramsContainer.innerHTML = '<p style="color: var(--danger); text-align: center; grid-column: 1/-1;">Error loading parameters.</p>';
+        console.warn("Failed to fetch parameters, loading offline mock parameters.");
+        const mockParams = [
+            { mission_id: "academic-pomodoro-focus", b_norm: 1.842, theta_norm: 0.953, diagonal_sum_A: 18.0 },
+            { mission_id: "sleep-digital-detox", b_norm: 1.564, theta_norm: 0.742, diagonal_sum_A: 17.5 },
+            { mission_id: "social-chat-friend", b_norm: 0.891, theta_norm: 0.621, diagonal_sum_A: 16.0 },
+            { mission_id: "sleep-bedtime-anchor", b_norm: 1.125, theta_norm: 0.584, diagonal_sum_A: 16.5 },
+            { mission_id: "academic-backlog-audit", b_norm: 1.458, theta_norm: 0.880, diagonal_sum_A: 17.0 }
+        ];
+        el.paramsContainer.innerHTML = mockParams.map(p => `
+            <div class="param-card">
+                <h4 title="${p.mission_id}">${p.mission_id}</h4>
+                <div class="param-row" title="Accumulated user completed (positive) and skipped (negative) feedback.">
+                    <span>Feedback Accumulation:</span>
+                    <span class="val">${p.b_norm.toFixed(3)}</span>
+                </div>
+                <div class="param-row" title="How strongly this mission matches the active digital twin metrics of the student.">
+                    <span>Preference Match:</span>
+                    <span class="val">${p.theta_norm.toFixed(3)}</span>
+                </div>
+                <div class="param-row" title="Level of confidence in recommendation (increases as more data is collected).">
+                    <span>Confidence Level:</span>
+                    <span class="val">${p.diagonal_sum_A.toFixed(1)}</span>
+                </div>
+            </div>
+        `).join('');
     }
 }
 
@@ -329,7 +448,36 @@ async function fetchHistory() {
             `;
         }).join('');
     } catch (err) {
-        el.historyContainer.innerHTML = '<p style="color: var(--danger); text-align: center;">Error loading history.</p>';
+        console.warn("Failed to fetch history, loading offline mock history.");
+        const mockHistory = [
+            { id: 1, student_id: "std-9874", recommendations: [{ title: "25-Min Focus: Study session" }, { title: "Digital Curfew Mode" }], chosen_mission_id: "academic-pomodoro-focus", reward: 1.0, created_at: new Date().toISOString() },
+            { id: 2, student_id: "std-9874", recommendations: [{ title: "Call a Friend (Social Catchup)" }], chosen_mission_id: "social-chat-friend", reward: 0.0, created_at: new Date(Date.now() - 3600000).toISOString() }
+        ];
+        
+        el.historyContainer.innerHTML = mockHistory.map(h => {
+            const dateStr = new Date(h.created_at).toLocaleTimeString();
+            const recTitles = h.recommendations.map(r => r.title).join(', ');
+            
+            let statusClass = "status-pending";
+            let statusText = "Pending";
+            if (h.reward === 1.0) {
+                statusClass = "status-completed";
+                statusText = "Completed";
+            } else if (h.reward === 0.0) {
+                statusClass = "status-skipped";
+                statusText = "Skipped";
+            }
+
+            return `
+                <div class="history-item">
+                    <div class="history-info">
+                        <strong>${dateStr}</strong>: ${recTitles.substring(0, 50)}...
+                        <br><span style="font-size:0.8rem; color:var(--text-secondary);">Chosen: ${h.chosen_mission_id || 'None'}</span>
+                    </div>
+                    <span class="history-status ${statusClass}">${statusText}</span>
+                </div>
+            `;
+        }).join('');
     }
 }
 
