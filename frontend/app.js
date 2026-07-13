@@ -156,7 +156,7 @@ async function getRecommendations() {
         if (!response.ok) throw new Error("API recommendation failed.");
         const data = await response.json();
         
-        renderRecommendations(data.recommendations, payload, data.advice);
+        renderRecommendations(data.recommendations.slice(0, 5), payload, data.advice);
     } catch (err) {
         console.warn("API recommendation failed. Falling back to local offline mock mode.", err);
         

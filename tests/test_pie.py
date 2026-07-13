@@ -125,7 +125,7 @@ def test_api_endpoints():
     assert response.status_code == 200
     data = response.json()
     assert data["student_id"] == "test-std-1"
-    assert len(data["recommendations"]) == 5
+    assert len(data["recommendations"]) == 10
     
     # 3. Test feedback
     feedback_payload = {

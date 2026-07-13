@@ -194,9 +194,10 @@ def recommend_interventions(payload: RecommendationRequest, db: Session = Depend
             rationale=rationale
         ))
         
-    # Sort and take top 5
+    # Sort and take top 10
     scored_missions.sort(key=lambda x: x.score, reverse=True)
-    top_5 = scored_missions[:5]
+    top_10 = scored_missions[:10]
+    top_5 = top_10[:5]
     
     # 5.5 Try to fetch dynamic rationales and advice from LLM wellness models
     from pie.llm import generate_llm_rationales_and_advice
@@ -220,7 +221,7 @@ def recommend_interventions(payload: RecommendationRequest, db: Session = Depend
     
     advice = "Wellness Focus: Establish structured sleep rituals, manage academic task blocks, and connect with peers."
     
-    # Apply local heuristics to customize top_5 missions if LLM falls back
+    # Apply local heuristics to customize top_10 missions if LLM falls back
     feared = payload.feared_subjects[0] if payload.feared_subjects else None
     exam = payload.upcoming_exams[0].get("subject") if payload.upcoming_exams else None
     exam_date = payload.upcoming_exams[0].get("date") if payload.upcoming_exams else None
@@ -228,7 +229,7 @@ def recommend_interventions(payload: RecommendationRequest, db: Session = Depend
     screen = payload.daily_screen_time_hours
     bedtime = payload.sleep_bedtime_target
     
-    for m in top_5:
+    for m in top_10:
         if "academic-pomodoro" in m.mission_id:
             if feared:
                 m.title = f"25-Min Focus: {feared}"
@@ -290,7 +291,7 @@ def recommend_interventions(payload: RecommendationRequest, db: Session = Depend
                 "mission_id": m.mission_id,
                 "title": m.title,
                 "score": m.score
-            } for m in top_5]
+            } for m in top_10]
         )
         db.add(rec_log)
         db.commit()
@@ -300,7 +301,7 @@ def recommend_interventions(payload: RecommendationRequest, db: Session = Depend
         
     return RecommendationResponse(
         student_id=payload.student_id,
-        recommendations=top_5,
+        recommendations=top_10,
         advice=advice
     )
 
