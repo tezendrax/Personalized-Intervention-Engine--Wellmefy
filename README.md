@@ -149,15 +149,7 @@ The Cumulative CTR curves show rapid learning during the exploration phase, stab
 
 ---
 
-## 8. Interactive UI Dashboard
-
-An interactive dashboard allows users to adjust digital twin variables, input academic cues, and trigger simulation runs:
-
-![PIE Engine Dashboard Mockup](pie_dashboard_mockup.png)
-
----
-
-## 9. File Directory Map
+## 8. File Directory Map
 
 * `/pie`: Core backend module files.
   * `config.py`: Environment configurations and token loading.
@@ -179,7 +171,7 @@ An interactive dashboard allows users to adjust digital twin variables, input ac
 
 ---
 
-## 10. How to Run Locally
+## 9. How to Run Locally
 
 ### 1. Start the Standalone Engine
 Navigate to the directory and execute the server:
