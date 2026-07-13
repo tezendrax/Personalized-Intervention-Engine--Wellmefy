@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized Intervention Engine (PIE) - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-section">
+                <span class="pie-logo">π</span>
+            </div>
+            <div class="header-title">
+                <h1>Personalized Intervention Engine</h1>
+            </div>
+            <div class="api-badge" id="server-status">Connecting to API (8004)...</div>
+        </header>
+
+        <div class="dashboard-grid">
+            <!-- Left Column: Controls and Context -->
+            <div class="left-column">
+                <div class="panel">
+                    <h2 class="panel-title">Student Digital Twin State</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.2rem; font-size: 0.9rem;">
+                        Adjust the sliders to simulate changes in the student's telemetry and digital twin representation.
+                    </p>
+                    
+                    <div class="input-group">
+                        <div class="input-label-row">
+                            <label for="stress-slider">Stress Level</label>
+                            <span class="val" id="stress-val">0.30</span>
+                        </div>
+                        <input type="range" id="stress-slider" min="0" max="1" step="0.05" value="0.30">
+                    </div>
+
+                    <div class="input-group">
+                        <div class="input-label-row">
+                            <label for="anxiety-slider">Anxiety Level</label>
+                            <span class="val" id="anxiety-val">0.30</span>
+                        </div>
+                        <input type="range" id="anxiety-slider" min="0" max="1" step="0.05" value="0.30">
+                    </div>
+
+                    <div class="input-group">
+                        <div class="input-label-row">
+                            <label for="fatigue-slider">Fatigue Level</label>
+                            <span class="val" id="fatigue-val">0.30</span>
+                        </div>
+                        <input type="range" id="fatigue-slider" min="0" max="1" step="0.05" value="0.30">
+                    </div>
+
+                    <div class="input-group">
+                        <div class="input-label-row">
+                            <label for="sleep-slider">Sleep Quality</label>
+                            <span class="val" id="sleep-val">0.70</span>
+                        </div>
+                        <input type="range" id="sleep-slider" min="0" max="1" step="0.05" value="0.70">
+                    </div>
+
+                    <div class="input-group">
+                        <div class="input-label-row">
+                            <label for="academic-slider">Academic Burden</label>
+                            <span class="val" id="academic-val">0.40</span>
+                        </div>
+                        <input type="range" id="academic-slider" min="0" max="1" step="0.05" value="0.40">
+                    </div>
+
+                    <div class="input-group">
+                        <div class="input-label-row">
+                            <label for="social-slider">Social Interaction</label>
+                            <span class="val" id="social-val">0.70</span>
+                        </div>
+                        <input type="range" id="social-slider" min="0" max="1" step="0.05" value="0.70">
+                    </div>
+
+                    <div class="input-group">
+                        <div class="input-label-row">
+                            <label for="mood-slider">Subjective Mood</label>
+                            <span class="val" id="mood-val">0.60</span>
+                        </div>
+                        <input type="range" id="mood-slider" min="0" max="1" step="0.05" value="0.60">
+                    </div>
+
+                    <div class="input-group">
+                        <div class="input-label-row">
+                            <label for="resilience-slider">Coping Resilience</label>
+                            <span class="val" id="resilience-val">0.70</span>
+                        </div>
+                        <input type="range" id="resilience-slider" min="0" max="1" step="0.05" value="0.70">
+                    </div>
+
+                    <div class="input-group">
+                        <div class="input-label-row">
+                            <label for="focus-slider">Focus Score</label>
+                            <span class="val" id="focus-val">0.70</span>
+                        </div>
+                        <input type="range" id="focus-slider" min="0" max="1" step="0.05" value="0.70">
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h2 class="panel-title">Environmental & User Context</h2>
+                    
+                    <div class="input-group">
+                        <div class="input-label-row">
+                            <label for="time-slider">Time of Day (Hour)</label>
+                            <span class="val" id="time-val">12:00 PM</span>
+                        </div>
+                        <input type="range" id="time-slider" min="0" max="23" step="1" value="12">
+                    </div>
+
+                    <div class="input-group">
+                        <div class="input-label-row">
+                            <label for="screentime-slider">Smartphone Screen Time</label>
+                            <span class="val" id="screentime-val">0.50</span>
+                        </div>
+                        <input type="range" id="screentime-slider" min="0" max="1" step="0.05" value="0.50">
+                    </div>
+
+                    <div class="input-group">
+                        <div class="input-label-row">
+                            <label for="steps-slider">Steps Ratio (vs. Target)</label>
+                            <span class="val" id="steps-val">1.00</span>
+                        </div>
+                        <input type="range" id="steps-slider" min="0" max="1.5" step="0.05" value="1.00">
+                    </div>
+
+                    <div class="input-group">
+                        <div class="input-label-row">
+                            <label for="availability-slider">Calendar Availability</label>
+                            <span class="val" id="availability-val">0.60</span>
+                        </div>
+                        <input type="range" id="availability-slider" min="0" max="1" step="0.05" value="0.60">
+                    </div>
+
+                    <div class="select-row">
+                        <div class="select-group">
+                            <label for="weekend-select">Day Type</label>
+                            <select id="weekend-select">
+                                <option value="0">Weekday (Mon-Fri)</option>
+                                <option value="1">Weekend (Sat-Sun)</option>
+                            </select>
+                        </div>
+                        <div class="select-group">
+                            <label for="completion-slider">Past Completion Rate</label>
+                            <input type="range" id="completion-slider" min="0" max="1" step="0.05" value="0.70" style="margin-top: 0.5rem;">
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" id="get-recs-btn">Generate Recommendations</button>
+                </div>
+
+                <!-- Academic & Lifestyle Cues Panel -->
+                <div class="panel">
+                    <h2 class="panel-title">Academic & Lifestyle Cues</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.2rem; font-size: 0.9rem;">
+                        Provide specific academic indicators to trigger hyper-personalized recovery missions and advice.
+                    </p>
+
+                    <div class="input-group">
+                        <label for="feared-subject-input">Feared Subject (Last 7 Days)</label>
+                        <input type="text" id="feared-subject-input" placeholder="e.g. Operating Systems" style="width: 100%; padding: 0.6rem; border-radius: 8px; background: rgba(20,20,30,0.8); border: 1px solid rgba(255,255,255,0.15); color: white; margin-top: 0.4rem;">
+                    </div>
+
+                    <div class="select-row">
+                        <div class="select-group" style="margin-right: 0.5rem; flex: 1;">
+                            <label for="exam-subject-input">Upcoming Exam Subject</label>
+                            <input type="text" id="exam-subject-input" placeholder="e.g. Data Structures" style="width: 100%; padding: 0.6rem; border-radius: 8px; background: rgba(20,20,30,0.8); border: 1px solid rgba(255,255,255,0.15); color: white; margin-top: 0.4rem;">
+                        </div>
+                        <div class="select-group" style="flex: 1;">
+                            <label for="exam-date-input">Exam Date</label>
+                            <input type="date" id="exam-date-input" style="width: 100%; padding: 0.6rem; border-radius: 8px; background: rgba(20,20,30,0.8); border: 1px solid rgba(255,255,255,0.15); color: white; margin-top: 0.4rem;">
+                        </div>
+                    </div>
+
+                    <div class="input-group" style="margin-top: 1rem;">
+                        <label for="programming-issue-input">Programming / Lab Blocks</label>
+                        <input type="text" id="programming-issue-input" placeholder="e.g. pointers memory leak" style="width: 100%; padding: 0.6rem; border-radius: 8px; background: rgba(20,20,30,0.8); border: 1px solid rgba(255,255,255,0.15); color: white; margin-top: 0.4rem;">
+                    </div>
+
+                    <div class="select-row" style="margin-top: 0.5rem;">
+                        <div class="select-group" style="margin-right: 0.5rem; flex: 1;">
+                            <label for="screentime-hours-input">Daily Screen Time (Hours)</label>
+                            <input type="number" id="screentime-hours-input" min="0" max="24" step="0.5" value="6.5" style="width: 100%; padding: 0.6rem; border-radius: 8px; background: rgba(20,20,30,0.8); border: 1px solid rgba(255,255,255,0.15); color: white; margin-top: 0.4rem;">
+                        </div>
+                        <div class="select-group" style="flex: 1;">
+                            <label for="bedtime-target-input">Bedtime Target</label>
+                            <input type="time" id="bedtime-target-input" value="23:00" style="width: 100%; padding: 0.6rem; border-radius: 8px; background: rgba(20,20,30,0.8); border: 1px solid rgba(255,255,255,0.15); color: white; margin-top: 0.4rem;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Recommendations Feed and Simulator -->
+            <div class="right-column">
+                <div class="panel">
+                    <h2 class="panel-title">Recommended Interventions (Top 5)</h2>
+                    <div id="recs-container">
+                        <p style="color: var(--text-secondary); text-align: center; padding: 2rem;">
+                            Click "Generate Recommendations" to run the LinUCB Bandit scorer and rules pre-filter.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h2 class="panel-title">LinUCB Policy Simulator</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.2rem; font-size: 0.9rem;">
+                        Simulate batches of recommendation requests for a specific student cohort. Watch the Click-Through-Rate (CTR) and regret converge as the bandit parameters are updated in real-time.
+                    </p>
+                    
+                    <div class="simulator-controls">
+                        <div class="select-group" style="flex: 1.5;">
+                            <label for="sim-profile">Cohort Profile</label>
+                            <select id="sim-profile">
+                                <option value="Stressed Academic">Stressed Academic (Prefers mental/academic, fatigued)</option>
+                                <option value="Late-Night Gamer">Late-Night Gamer (Prefers social/digital, screen heavy)</option>
+                                <option value="Balanced Student">Balanced Student (Receptive to physical/sleep/social)</option>
+                            </select>
+                        </div>
+                        <div class="select-group" style="flex: 0.8;">
+                            <label for="sim-iterations">Iterations</label>
+                            <select id="sim-iterations">
+                                <option value="50">50 rounds</option>
+                                <option value="100" selected>100 rounds</option>
+                                <option value="200">200 rounds</option>
+                                <option value="500">500 rounds</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-secondary" id="run-sim-btn" style="margin-top: 1.4rem; padding: 0.6rem 1rem;">Run Batch</button>
+                    </div>
+
+                    <div class="sim-results" id="sim-results-section" style="display: none;">
+                        <div class="sim-metric-row">
+                            <div class="sim-metric-card">
+                                <div class="lbl">Total Rounds</div>
+                                <div class="num" id="sim-rounds">0</div>
+                            </div>
+                            <div class="sim-metric-card">
+                                <div class="lbl">Final Click Rate</div>
+                                <div class="num" id="sim-ctr">0%</div>
+                            </div>
+                            <div class="sim-metric-card">
+                                <div class="lbl">Avg Policy Regret</div>
+                                <div class="num" id="sim-regret">0.00</div>
+                            </div>
+                        </div>
+                        <div class="sim-logs-title">Simulation Progress Logs</div>
+                        <div class="sim-logs" id="sim-logs-box"></div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h2 class="panel-title">Bandit Parameters Summary</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.2rem; font-size: 0.88rem; line-height: 1.45;">
+                        These metrics show the variables calculated by the 15-dimensional <strong>LinUCB Multi-Armed Bandit</strong> for each mission:
+                        <br>• <strong>Feedback Accumulation</strong>: Cumulative feedback responses (increases with completed/skipped actions).
+                        <br>• <strong>Preference Match</strong>: Strength of alignment with the student's current digital twin state traits.
+                        <br>• <strong>Confidence Level</strong>: Amount of training data collected (higher trace = less recommendation uncertainty).
+                    </p>
+                    <div class="params-grid" id="params-grid-container">
+                        <p style="color: var(--text-secondary); text-align: center; grid-column: 1/-1;">Loading parameters...</p>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h2 class="panel-title">Recent Recommendation History</h2>
+                    <div id="history-container">
+                        <p style="color: var(--text-secondary); text-align: center;">No history logs found.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
